@@ -7,7 +7,6 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   let progress = 0;
   const interval = setInterval(() => {
     progress += 1;
-    if (progress === 100) throw new NotFoundError('No data found for this show/movie');
     ctx.progress(progress);
   }, 100);
 
@@ -15,6 +14,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   if (ctx.media.type === 'show') url += `&s=${ctx.media.season.number}&e=${ctx.media.episode.number}`;
 
   const response = await ctx.fetcher(url);
+  ctx.progress(100);
 
   if (response.statusCode === 404) {
     throw new Error('Video Not Found');
