@@ -39,26 +39,20 @@ async function getStreams(title: string) {
       const sourceName = element.parent().parent().parent().find('.version-host').text().trim();
       let embedId;
       switch (sourceName) {
-        case 'mixdrop.co':
-          embedId = 'mixdrop';
-          break;
         case 'voe.sx':
           embedId = 'voe';
           break;
         case 'upstream.to':
           embedId = 'upstream';
           break;
-        case 'dropload.io':
-          embedId = 'dropload';
+        case 'streamwish.to':
+          embedId = 'streamwish';
           break;
         case 'vtube.to':
           embedId = 'vtube';
           break;
         case 'vidmoly.me':
           embedId = 'vidmoly';
-          break;
-        case 'filelions.to':
-          embedId = 'filelions';
           break;
         default:
           embedId = null;

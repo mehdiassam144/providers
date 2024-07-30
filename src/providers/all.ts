@@ -42,6 +42,7 @@ import { smashyStreamOScraper } from './embeds/smashystream/opstream';
 import { smashyStreamFScraper } from './embeds/smashystream/video1';
 import { streamTapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
+import { streamwishScraper } from './embeds/streamwish';
 import { turbovidScraper } from './embeds/turbovid';
 import { vidCloudScraper } from './embeds/vidcloud';
 import { vidkerScraper } from './embeds/vidker';
@@ -144,5 +145,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     autoembedTamilScraper,
     autoembedTeluguScraper,
     vidkerScraper,
+    streamwishScraper,
   ];
 }
