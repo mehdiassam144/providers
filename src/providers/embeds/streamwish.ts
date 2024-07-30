@@ -9,8 +9,8 @@ const evalCodeRegex = /eval\((.*)\)/g;
 const fileRegex = /file:"(.*?)"/g;
 
 export const streamwishScraper = makeEmbed({
-  id: 'vtube',
-  name: 'vTube',
+  id: 'streamwish',
+  name: 'StreamWish',
   rank: 165,
   scrape: async (ctx) => {
     const mainPageRes = await ctx.proxiedFetcher.full<string>(ctx.url, {
