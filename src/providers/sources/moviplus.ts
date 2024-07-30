@@ -90,6 +90,7 @@ export const moviplusScraper = makeSourcerer({
   id: 'moviplus',
   name: 'MoviPlus',
   rank: 92,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
 });
