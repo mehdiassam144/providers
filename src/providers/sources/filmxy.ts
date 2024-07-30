@@ -11,10 +11,16 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     ctx.progress(progress);
   }, 100);
 
-  let url = `http://localhost:3000/search?id=${ctx.media.tmdbId}`; // :)
+  let url = `http://localhost:3000/search?id=${ctx.media.imdbId}`; // :)
   if (ctx.media.type === 'show') url += `&s=${ctx.media.season.number}&e=${ctx.media.episode.number}`;
 
   const response = await ctx.fetcher(url);
+
+  if (response.statusCode === 404) {
+    throw new Error('Video Not Found');
+  } else if (response.statusCode !== 200) {
+    throw new NotFoundError('Failed to search');
+  }
 
   if (response) return response as SourcererOutput;
 
