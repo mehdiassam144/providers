@@ -18,8 +18,6 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   if (response.statusCode === 404) {
     throw new Error('Video Not Found');
-  } else if (response.statusCode !== 200) {
-    throw new NotFoundError('Failed to search');
   }
 
   if (response) return response as SourcererOutput;
