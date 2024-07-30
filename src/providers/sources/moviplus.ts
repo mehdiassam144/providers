@@ -10,7 +10,7 @@ import { compareMedia } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const baseUrl = 'https://moviplus.net';
+const baseUrl = 'https://arbplus.net';
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const searchPage = await ctx.proxiedFetcher('/', {
@@ -90,7 +90,7 @@ export const moviplusScraper = makeSourcerer({
   id: 'moviplus',
   name: 'MoviPlus',
   rank: 92,
-  disabled: true,
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
 });
