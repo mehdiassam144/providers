@@ -51,7 +51,7 @@ import { vidplayScraper } from './embeds/vidplay';
 import { voeScraper } from './embeds/voe';
 import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
 import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
-import { astraScraper, novaScraper } from './embeds/whvx';
+import { astraScraper, novaScraper, orionScraper } from './embeds/whvx';
 import { wootlyScraper } from './embeds/wootly';
 import { autoembedScraper } from './sources/autoembed';
 import { catflixScraper } from './sources/catflix';
@@ -136,6 +136,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     vidMolyScraper,
     novaScraper,
     astraScraper,
+    orionScraper,
     smashyStreamFScraper,
     smashyStreamOScraper,
     turbovidScraper,

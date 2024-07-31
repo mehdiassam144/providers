@@ -5,10 +5,14 @@ import { NotFoundError } from '@/utils/errors';
 const providers = [
   {
     id: 'nova',
-    rank: 710,
+    rank: 720,
   },
   {
     id: 'astra',
+    rank: 710,
+  },
+  {
+    id: 'orion',
     rank: 700,
   },
 ];
@@ -63,4 +67,4 @@ function embed(provider: { id: string; rank: number }) {
   });
 }
 
-export const [novaScraper, astraScraper] = providers.map(embed);
+export const [novaScraper, astraScraper, orionScraper] = providers.map(embed);
