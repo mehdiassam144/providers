@@ -63,6 +63,7 @@ import { moviplusScraper } from './sources/moviplus';
 import { nepuScraper } from './sources/nepu';
 import { nitesScraper } from './sources/nites';
 import { primewireScraper } from './sources/primewire';
+import { ridooMoviesScraper } from './sources/ridomovies';
 import { smashyStreamScraper } from './sources/smashystream';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
@@ -79,6 +80,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     goMoviesScraper,
     zoechipScraper,
     vidsrcScraper,
+    ridooMoviesScraper,
     lookmovieScraper,
     nsbxScraper,
     vidSrcToScraper,
