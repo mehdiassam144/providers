@@ -57,7 +57,7 @@ export const closeLoadScraper = makeEmbed({
     }
     const base64Url = match[1]; // This is your base64-encoded URL.
     const url = atob(base64Url); // Decode the base64 string to get the actual URL.
-    const proxiedUrl = `https://m3u8.wafflehacker.io/?url=${encodeURIComponent(url)}&headers=%7B%22referer%22%3A%20%22https%3A%2F%2Fcloseload.top%2F%22%2C%20%22origin%22
+    const proxiedUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(url)}&headers=%7B%22referer%22%3A%20%22https%3A%2F%2Fcloseload.top%2F%22%2C%20%22origin%22
 %3A%20%22https%3A%2F%2Fcloseload.top%22%7D`;
     return {
       stream: [
