@@ -13,6 +13,7 @@ import { SerieAjaxResponse } from './types';
 export const warezcdnScraper = makeSourcerer({
   id: 'warezcdn',
   name: 'WarezCDN',
+  disabled: true,
   rank: 81,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: async (ctx) => {
