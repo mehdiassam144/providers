@@ -12,7 +12,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   const urlEncodedTitle = encodeURIComponent(ctx.media.title);
   const urlEncodedReleaseYear = encodeURIComponent(ctx.media.releaseYear);
-  const url = `https://ee3.wafflehacker.io/search?id=${urlEncodedTitle}&releaseYear=${urlEncodedReleaseYear}`;
+  const url = `https://ee3.wafflehacker.io/search?title=${urlEncodedTitle}&releaseYear=${urlEncodedReleaseYear}`;
   const response = await ctx.fetcher(url);
   ctx.progress(100);
 
