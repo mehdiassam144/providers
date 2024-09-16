@@ -26,7 +26,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   throw new NotFoundError('No data found for this movie');
 }
 
-export const filmxyScraper = makeSourcerer({
+export const ee3Scraper = makeSourcerer({
   id: 'ee3',
   name: 'EE3',
   rank: 111,
