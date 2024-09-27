@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 import * as unpacker from 'unpacker';
 
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
-const packedRegex = /<script type='text\/javascript'>([\s\S]*?)\s*<\/script>/;
+const packedRegex = /<script type=(?:['"]text\/javascript['"])?\s*>(eval\(function\(p,a,c,k,e,[\s\S]*?\))\s*<\/script>/;
 const linkRegex = /src:"(https:\/\/[^"]+)"/;
 
 export const filelionsScraper = makeEmbed({
@@ -14,13 +15,19 @@ export const filelionsScraper = makeEmbed({
     const streamRes = await ctx.proxiedFetcher<string>(ctx.url);
     // eslint-disable-next-line no-console
     console.log('Full response for debugging:', streamRes);
+    console.log(
+      'Checking script content presence:',
+      streamRes.includes("<script type='text/javascript'>eval(function(p,a,c,k,e,d){"),
+    );
+    console.log('Attempting to match script content with regex.');
     const packed = streamRes.match(packedRegex);
+
     if (!packed || !packed[1]) {
-      console.error('Script content not found');
-      throw new Error('Script content not found');
+      console.error('Packed script content not found.');
+      throw new Error('Packed script content not found');
     }
 
-    if (!packed) throw new Error('filelions packed not found');
+    console.log('Captured packed content:', packed[1]); // Displays the captured content
 
     const unpacked = unpacker.unpack(packed[1]);
     const link = unpacked.match(linkRegex);
