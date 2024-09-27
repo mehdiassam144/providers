@@ -2,7 +2,6 @@ import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
 const linkRegex = /'hls': ?'(http.*?)',/;
-const tracksRegex = /previewThumbnails:\s{.*src:\["([^"]+)"]/;
 
 export const voeScraper = makeEmbed({
   id: 'voe',
@@ -13,9 +12,10 @@ export const voeScraper = makeEmbed({
     const embed = embedRes.body;
 
     const playerSrc = embed.match(linkRegex) ?? [];
-    const thumbnailTrack = embed.match(tracksRegex);
 
     const streamUrl = playerSrc[1];
+    const decodedStreamUrl = atob(streamUrl);
+    const proxiedStreamUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(decodedStreamUrl)}`;
     if (!streamUrl) throw new Error('Stream url not found in embed code');
 
     return {
@@ -23,20 +23,9 @@ export const voeScraper = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: streamUrl,
-          flags: [flags.CORS_ALLOWED, flags.IP_LOCKED],
+          playlist: proxiedStreamUrl,
+          flags: [flags.CORS_ALLOWED],
           captions: [],
-          headers: {
-            Referer: 'https://voe.sx',
-          },
-          ...(thumbnailTrack
-            ? {
-                thumbnailTrack: {
-                  type: 'vtt',
-                  url: new URL(embedRes.finalUrl).origin + thumbnailTrack[1],
-                },
-              }
-            : {}),
         },
       ],
     };
