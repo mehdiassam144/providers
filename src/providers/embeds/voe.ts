@@ -7,12 +7,8 @@ const redirectRegex = /window\.location\.href = '(https?:\/\/[^']+)'/;
 
 // Define the return type as string for the safeBase64Decode function
 function safeBase64Decode(encodedString: string): string {
-  console.log('Encoded HLS URL:', encodedString);
-
   try {
-    const decodedString = atob(encodedString);
-    console.log('Decoded HLS URL:', decodedString);
-    return decodedString;
+    return atob(encodedString);
   } catch (e) {
     console.error('Failed to decode base64 string:', e);
     throw new Error('Base64 decoding error');
