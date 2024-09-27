@@ -11,7 +11,7 @@ const fileRegex = /file:"(.*?)"/g;
 export const streamwishScraper = makeEmbed({
   id: 'streamwish',
   name: 'StreamWish',
-  rank: 165,
+  rank: 111,
   scrape: async (ctx) => {
     const mainPageRes = await ctx.proxiedFetcher.full<string>(ctx.url, {
       headers: {

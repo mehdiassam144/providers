@@ -10,7 +10,7 @@ const linkRegex = /file:"([^"]+)"/;
 export const filelionsScraper = makeEmbed({
   id: 'filelions',
   name: 'Filelions',
-  rank: 111,
+  rank: 165,
   async scrape(ctx) {
     const streamRes = await ctx.proxiedFetcher<string>(ctx.url);
     // eslint-disable-next-line no-console
