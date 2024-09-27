@@ -2,14 +2,23 @@ import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
 const linkRegex = /'hls': ?'(http.*?)',/;
+const redirectRegex = /window\.location\.href = '(https?:\/\/[^']+)'/;
 
 export const voeScraper = makeEmbed({
   id: 'voe',
   name: 'voe.sx',
   rank: 180,
   async scrape(ctx) {
-    const embedRes = await ctx.proxiedFetcher.full<string>(ctx.url);
-    const embed = embedRes.body;
+    let embedRes = await ctx.proxiedFetcher.full<string>(ctx.url);
+    let embed = embedRes.body;
+
+    // Check for redirection via window.location.href
+    const redirectMatch = embed.match(redirectRegex);
+    if (redirectMatch) {
+      // Fetch new embed from the redirection URL
+      embedRes = await ctx.proxiedFetcher.full<string>(redirectMatch[1]);
+      embed = embedRes.body;
+    }
 
     const playerSrc = embed.match(linkRegex) ?? [];
 
