@@ -5,7 +5,7 @@ import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
 const packedRegex = /<script type=(?:['"]text\/javascript['"])?\s*>(eval\(function\(p,a,c,k,e,[\s\S]*?\))\s*<\/script>/;
-const linkRegex = /src:"(https:\/\/[^"]+)"/;
+const linkRegex = /file:"([^"]+)"/;
 
 export const filelionsScraper = makeEmbed({
   id: 'filelions',
@@ -14,12 +14,6 @@ export const filelionsScraper = makeEmbed({
   async scrape(ctx) {
     const streamRes = await ctx.proxiedFetcher<string>(ctx.url);
     // eslint-disable-next-line no-console
-    console.log('Full response for debugging:', streamRes);
-    console.log(
-      'Checking script content presence:',
-      streamRes.includes("<script type='text/javascript'>eval(function(p,a,c,k,e,d){"),
-    );
-    console.log('Attempting to match script content with regex.');
     const packed = streamRes.match(packedRegex);
 
     if (!packed || !packed[1]) {
@@ -27,14 +21,16 @@ export const filelionsScraper = makeEmbed({
       throw new Error('Packed script content not found');
     }
 
-    console.log('Captured packed content:', packed[1]); // Displays the captured content
-
     const unpacked = unpacker.unpack(packed[1]);
-    const link = unpacked.match(linkRegex);
-    const proxiedPlaylist = link
-      ? `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${link[1]}`)}`
-      : '';
 
+    const linkMatch = unpacked.match(linkRegex);
+    if (!linkMatch || !linkMatch[1]) {
+      console.error('File URL not found in the unpacked script.');
+      throw new Error('File URL not found in the unpacked script');
+    }
+
+    const proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(linkMatch[1])}`;
+    console.log('Proxied Playlist URL:', proxiedPlaylist);
     if (!proxiedPlaylist || proxiedPlaylist === '') throw new Error('filelions file not found');
     return {
       stream: [
