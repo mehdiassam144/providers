@@ -1,7 +1,7 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
-const linkRegex = /'hls': ?'(http.*?)',/;
+const linkRegex = /'hls':\s*'([a-zA-Z0-9=+/]+)'/;
 const redirectRegex = /window\.location\.href = '(https?:\/\/[^']+)'/;
 
 export const voeScraper = makeEmbed({
@@ -20,10 +20,13 @@ export const voeScraper = makeEmbed({
       embed = embedRes.body;
     }
 
-    const playerSrc = embed.match(linkRegex) ?? [];
-
+    // Attempt to extract the HLS URL from the modified embed content
+    const playerSrc = embed.match(linkRegex);
+    if (!playerSrc || playerSrc.length < 2) {
+      throw new Error('Stream URL not found in embed code');
+    }
     const streamUrl = playerSrc[1];
-    const decodedStreamUrl = atob(streamUrl);
+    const decodedStreamUrl = atob(streamUrl); // Decode the base64 HLS URL
     const proxiedStreamUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(decodedStreamUrl)}`;
     if (!streamUrl) throw new Error('Stream url not found in embed code');
 
