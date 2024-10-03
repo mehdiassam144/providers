@@ -52,7 +52,7 @@ async function getStreams(title: string) {
           embedId = 'vidmoly';
           break;
         case 'd00d.watch':
-          embedId = 'filelions';
+          embedId = 'dood';
           break;
         default:
           embedId = null;
