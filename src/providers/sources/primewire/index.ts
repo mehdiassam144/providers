@@ -51,7 +51,7 @@ async function getStreams(title: string) {
         case 'vidmoly.me':
           embedId = 'vidmoly';
           break;
-        case 'd00d.watch':
+        case 'dood.watch':
           embedId = 'dood';
           break;
         default:
