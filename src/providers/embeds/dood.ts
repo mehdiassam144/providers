@@ -13,7 +13,11 @@ export const doodScraper = makeEmbed({
       url = request.finalUrl;
     }
 
-    const vidScrapeURL = `https://dood.wafflehacker.io/scrape?url=${encodeURIComponent(url)}`;
+    // Extract ID from URL
+    const urlSegments = url.split('/');
+    const videoId = urlSegments.pop() || urlSegments.pop();
+
+    const vidScrapeURL = `https://dood.wafflehacker.io/video/${videoId}`;
     const vidScrape = await ctx.fetcher(vidScrapeURL);
 
     ctx.progress(50);
@@ -21,8 +25,6 @@ export const doodScraper = makeEmbed({
     if (vidScrape.videoUrl?.length === 0) {
       throw new NotFoundError('No Video Found');
     }
-
-    const downloadURL = `https://dood.wafflehacker.io/view?url=${encodeURIComponent(vidScrape.videoUrl)}`;
 
     ctx.progress(100);
 
@@ -37,7 +39,7 @@ export const doodScraper = makeEmbed({
           qualities: {
             unknown: {
               type: 'mp4',
-              url: downloadURL,
+              url: vidScrape.videoUrl,
             },
           },
         },
