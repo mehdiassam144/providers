@@ -1,4 +1,5 @@
 import { Embed, Sourcerer } from '@/providers/base';
+import { doodScraper } from '@/providers/embeds/dood';
 import { droploadScraper } from '@/providers/embeds/dropload';
 import { febboxHlsScraper } from '@/providers/embeds/febbox/hls';
 import { febboxMp4Scraper } from '@/providers/embeds/febbox/mp4';
@@ -149,5 +150,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     autoembedTeluguScraper,
     vidkerScraper,
     streamwishScraper,
+    doodScraper,
   ];
 }
