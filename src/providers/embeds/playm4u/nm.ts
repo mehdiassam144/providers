@@ -1,6 +1,7 @@
 import { load } from 'cheerio';
 import crypto from 'crypto-js';
 
+import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
 const { AES, MD5 } = crypto;
@@ -115,7 +116,7 @@ export const playm4uNMScraper = makeEmbed({
           type: 'hls',
           playlist: apiRes.data,
           captions: [],
-          flags: [],
+          flags: [flags.CORS_ALLOWED],
         },
       ],
     };
