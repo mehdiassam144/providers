@@ -11,7 +11,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   }, 100);
 
   let url = `https://2embed.wafflehacker.io/scrape?id=${ctx.media.imdbId}`;
-  if (ctx.media.type === 'show') url += `?s=${ctx.media.season.number}&e=${ctx.media.episode.number}`;
+  if (ctx.media.type === 'show') url += `&s=${ctx.media.season.number}&e=${ctx.media.episode.number}`;
   const response = await ctx.fetcher(url);
   ctx.progress(100);
 
