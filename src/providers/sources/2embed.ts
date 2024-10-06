@@ -32,4 +32,5 @@ export const twoEmbedScraper = makeSourcerer({
   disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
+  scrapeShow: comboScraper,
 });
