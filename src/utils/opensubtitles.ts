@@ -7,7 +7,6 @@ function fixJson(jsonStr: string): string {
     JSON.parse(jsonStr);
     return jsonStr; // JSON is already valid
   } catch (e) {
-    // Find the last occurrence of a correctly closed object
     const lastIndex = jsonStr.lastIndexOf('}');
     return `${jsonStr.substring(0, lastIndex + 1)}]`;
   }
@@ -20,9 +19,9 @@ export async function addOpenSubtitlesCaptions(
 ): Promise<Caption[]> {
   try {
     const parts = atob(media).split('.');
-    const imdbId = parts[0]; // Ensure this is treated as a string
-    const season = Number(parts[1]) || null; // Explicitly convert to Number or null if conversion fails
-    const episode = Number(parts[2]) || null; // Explicitly convert to Number or null if conversion fails
+    const imdbId = parts[0]; // Assume this is treated as a string
+    const season = Number(parts[1]) || null;
+    const episode = Number(parts[2]) || null;
 
     if (!imdbId) return captions;
 
@@ -37,7 +36,8 @@ export async function addOpenSubtitlesCaptions(
       },
     );
 
-    const jsonResponse = fixJson(response); // Assuming response is a JSON string
+    // Check if response is a string or an object
+    const jsonResponse = typeof response === 'string' ? fixJson(response) : fixJson(JSON.stringify(response));
     const Res = JSON.parse(jsonResponse);
 
     const openSubtitlesCaptions: Caption[] = [];
