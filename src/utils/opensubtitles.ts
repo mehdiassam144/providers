@@ -3,35 +3,35 @@ import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
 
 function fixJson(jsonStr: string): string {
-  try {
-    // Attempt to parse the JSON to see if it's already valid
-    JSON.parse(jsonStr);
-    return jsonStr;
-  } catch (e) {
-    // If there's a parsing error, find the last index of potentially complex structures
-    let lastValidObjectIndex = jsonStr.lastIndexOf('}');
-    let lastValidArrayIndex = jsonStr.lastIndexOf(']');
-    let lastValidIndex = Math.max(lastValidObjectIndex, lastValidArrayIndex);
+  let testJson = jsonStr.trim();
+  let attempts = 0; // Limit the number of attempts to prevent infinite loops
+  const maxAttempts = 10;
 
-    // Attempt to close open strings and structures
-    while (lastValidIndex > -1) {
-      try {
-        // Close the structure
-        let testJson = jsonStr.substring(0, lastValidIndex + 1);
-        testJson += lastValidObjectIndex > lastValidArrayIndex ? '}' : ']';
-        JSON.parse(testJson); // Test if the JSON is now valid
-        return testJson;
-      } catch (error) {
-        // If still failing, decrement and try again
-        lastValidObjectIndex = jsonStr.lastIndexOf('}', lastValidObjectIndex - 1);
-        lastValidArrayIndex = jsonStr.lastIndexOf(']', lastValidArrayIndex - 1);
-        lastValidIndex = Math.max(lastValidObjectIndex, lastValidArrayIndex);
+  while (attempts < maxAttempts) {
+    try {
+      JSON.parse(testJson);
+      return testJson; // If valid, return the fixed JSON
+    } catch (e: any) {
+      attempts++;
+      const message: string = e.message;
+      if (message.includes('Unexpected end of JSON input') || message.includes('Unterminated string')) {
+        const lastOpenCurly = testJson.lastIndexOf('{');
+        const lastOpenBracket = testJson.lastIndexOf('[');
+        const lastQuote = testJson.lastIndexOf('"');
+
+        if (lastQuote > lastOpenCurly && lastQuote > lastOpenBracket) {
+          testJson = `${testJson.substring(0, lastQuote)}"${testJson.substring(lastQuote + 1)}`;
+        } else {
+          testJson = testJson.substring(0, Math.max(lastOpenCurly, lastOpenBracket) + 1);
+        }
+        testJson += lastOpenCurly > lastOpenBracket ? '}' : ']';
+      } else {
+        break; // Break the loop if the error isn't about incomplete input
       }
     }
-
-    // As a last resort, return an empty array or object based on what seems more likely needed
-    return lastValidObjectIndex > lastValidArrayIndex ? '{}' : '[]';
   }
+
+  return '{}'; // Return an empty object if no valid JSON can be formed
 }
 
 export async function addOpenSubtitlesCaptions(
