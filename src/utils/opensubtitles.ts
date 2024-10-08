@@ -3,13 +3,21 @@ import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
 
 function fixJson(jsonStr: string): string {
-  try {
-    JSON.parse(jsonStr);
-    return jsonStr; // JSON is already valid
-  } catch (e) {
-    const lastIndex = jsonStr.lastIndexOf('}');
-    return `${jsonStr.substring(0, lastIndex + 1)}]`;
+  // Remove any partial object or string at the end of the JSON
+  let lastValidIndex = Math.min(jsonStr.lastIndexOf('}'), jsonStr.lastIndexOf(']'));
+  while (lastValidIndex > -1) {
+    try {
+      const testJson = jsonStr.substring(0, lastValidIndex + 1);
+      JSON.parse(testJson); // Test if the JSON is valid
+      return testJson; // If valid, return the test JSON
+    } catch (e) {
+      // If still invalid, try the previous valid structure
+      const nextCloseCurly = jsonStr.lastIndexOf('}', lastValidIndex - 1);
+      const nextCloseBracket = jsonStr.lastIndexOf(']', lastValidIndex - 1);
+      lastValidIndex = Math.max(nextCloseCurly, nextCloseBracket);
+    }
   }
+  return '[]'; // Return an empty array if no valid JSON structure is found
 }
 
 export async function addOpenSubtitlesCaptions(
