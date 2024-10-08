@@ -3,21 +3,35 @@ import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
 
 function fixJson(jsonStr: string): string {
-  // Remove any partial object or string at the end of the JSON
-  let lastValidIndex = Math.min(jsonStr.lastIndexOf('}'), jsonStr.lastIndexOf(']'));
-  while (lastValidIndex > -1) {
-    try {
-      const testJson = jsonStr.substring(0, lastValidIndex + 1);
-      JSON.parse(testJson); // Test if the JSON is valid
-      return testJson; // If valid, return the test JSON
-    } catch (e) {
-      // If still invalid, try the previous valid structure
-      const nextCloseCurly = jsonStr.lastIndexOf('}', lastValidIndex - 1);
-      const nextCloseBracket = jsonStr.lastIndexOf(']', lastValidIndex - 1);
-      lastValidIndex = Math.max(nextCloseCurly, nextCloseBracket);
+  try {
+    // Attempt to parse the JSON to see if it's already valid
+    JSON.parse(jsonStr);
+    return jsonStr;
+  } catch (e) {
+    // If there's a parsing error, find the last index of potentially complex structures
+    let lastValidObjectIndex = jsonStr.lastIndexOf('}');
+    let lastValidArrayIndex = jsonStr.lastIndexOf(']');
+    let lastValidIndex = Math.max(lastValidObjectIndex, lastValidArrayIndex);
+
+    // Attempt to close open strings and structures
+    while (lastValidIndex > -1) {
+      try {
+        // Close the structure
+        let testJson = jsonStr.substring(0, lastValidIndex + 1);
+        testJson += lastValidObjectIndex > lastValidArrayIndex ? '}' : ']';
+        JSON.parse(testJson); // Test if the JSON is now valid
+        return testJson;
+      } catch (error) {
+        // If still failing, decrement and try again
+        lastValidObjectIndex = jsonStr.lastIndexOf('}', lastValidObjectIndex - 1);
+        lastValidArrayIndex = jsonStr.lastIndexOf(']', lastValidArrayIndex - 1);
+        lastValidIndex = Math.max(lastValidObjectIndex, lastValidArrayIndex);
+      }
     }
+
+    // As a last resort, return an empty array or object based on what seems more likely needed
+    return lastValidObjectIndex > lastValidArrayIndex ? '{}' : '[]';
   }
-  return '[]'; // Return an empty array if no valid JSON structure is found
 }
 
 export async function addOpenSubtitlesCaptions(
