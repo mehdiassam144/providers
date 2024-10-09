@@ -31,9 +31,8 @@ export async function addOpenSubtitlesCaptions(
       .split('.')
       .map((x, i) => (i === 0 ? x : Number(x) || null));
     if (!imdbId) return captions;
-
     // Ensure imdbId is treated as a string and slice it properly
-    const apiUrl = `https://os.whvx.net/subs?imdbId=${String(imdbId)}${
+    const apiUrl = `https://osproxy.whvx.net/subs?imdbId=${String(imdbId)}${
       season && episode ? `&season=${season}&episode=${episode}` : ''
     }`;
 
