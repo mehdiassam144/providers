@@ -36,7 +36,7 @@ export async function addOpenSubtitlesCaptions(
       season && episode ? `&season=${season}&episode=${episode}` : ''
     }`;
 
-    const rawResponse = await ops.proxiedFetcher(apiUrl, {
+    const rawResponse = await ops.fetcher(apiUrl, {
       headers: {
         'X-User-Agent': 'VLSub 0.10.2',
       },
