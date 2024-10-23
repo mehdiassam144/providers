@@ -50,7 +50,7 @@ export async function addOpenSubtitlesCaptions(
     for (const caption of Res) {
       // Retain the original SubDownloadLink, just adjust encoding in the link
       const url = caption.url;
-      const language = labelToLanguageCode(caption.display);
+      const language = caption.language;
       if (!url || !language) continue;
       openSubtitlesCaptions.push({
         id: url,
