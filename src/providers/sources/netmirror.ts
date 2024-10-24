@@ -31,7 +31,7 @@ export const netMirrorScraper = makeSourcerer({
   id: 'netmirror',
   name: 'NTFLX',
   rank: 130,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
