@@ -71,6 +71,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     // Step 2: Make sure values (like URLs) are wrapped in quotes properly
     jsonString = jsonString.replace(/:\s*([^"[{]\S+)/g, ':"$1"');
     jsonString = jsonString.replace(/"https":"\/\//g, '"https://');
+    jsonString = jsonString.replace(/", "/g, '",');
     console.log('jsonString:', jsonString);
     // Convert the matched part into a JSON string and parse it
     const fileUrlMatch = jsonString.match(/"file":"([^"]+)"/);
