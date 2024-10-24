@@ -61,15 +61,16 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   // Extract the part inside the <script> tags
   // Use regex to extract the file array from the script content
   const jsonMatch = playerPage.match(/file:\s*(\[\{.*\}\])/);
-
+  console.log('jsonMatch:', jsonMatch);
   if (jsonMatch && jsonMatch[1]) {
+    const fixedJson = jsonMatch[1].replace(/(\w+):/g, '"$1":');
     // Convert the matched part into a JSON string and parse it
-    const fileData = JSON.parse(jsonMatch[1]);
-
+    const fileData = JSON.parse(fixedJson);
+    console.log('fileData:', fileData);
     // Extract the URL from the parsed data
     const streamUrl = fileData[0].file;
     if (streamUrl && streamUrl[1]) {
-      proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}&headers=${encodeURIComponent(headersString)}`;
+      proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl)}&headers=${encodeURIComponent(headersString)}`;
     }
     if (!streamUrl) throw new NotFoundError('No stream found.');
     console.log('Extracted Stream URL:', streamUrl);
