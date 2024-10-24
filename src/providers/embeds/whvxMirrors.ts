@@ -21,7 +21,7 @@ export const headers = {
 function embed(provider: { id: string; rank: number }) {
   return makeEmbed({
     id: provider.id,
-    name: provider.id.charAt(0).toUpperCase() + provider.id.slice(1),
+    name: provider.id.toUpperCase(),
     rank: provider.rank,
     disabled: false,
     async scrape(ctx) {
