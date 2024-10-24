@@ -65,7 +65,11 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   if (jsonMatch && jsonMatch[1]) {
     let jsonString;
     jsonString = jsonMatch[1];
+    // Step 1: Replace property names with quotes (handles keys like 'file' and 'poster')
     jsonString = jsonString.replace(/(\w+):/g, '"$1":');
+
+    // Step 2: Make sure values (like URLs) are wrapped in quotes properly
+    jsonString = jsonString.replace(/:\s*([^"[{]\S+)/g, ':"$1"');
     // Convert the matched part into a JSON string and parse it
     const fileData = JSON.parse(jsonString);
     console.log('fileData:', fileData);
