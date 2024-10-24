@@ -63,13 +63,15 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   const jsonMatch = playerPage.match(/file:\s*(\[\{.*\}\])/);
   console.log('jsonMatch:', jsonMatch);
   if (jsonMatch && jsonMatch[1]) {
-    const fixedJson = jsonMatch[1].replace(/(\w+):/g, '"$1":');
+    let jsonString;
+    jsonString = jsonMatch[1];
+    jsonString = jsonString.replace(/(\w+):/g, '"$1":');
     // Convert the matched part into a JSON string and parse it
-    const fileData = JSON.parse(fixedJson);
+    const fileData = JSON.parse(jsonString);
     console.log('fileData:', fileData);
     // Extract the URL from the parsed data
     const streamUrl = fileData[0].file;
-    if (streamUrl && streamUrl[1]) {
+    if (streamUrl) {
       proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl)}&headers=${encodeURIComponent(headersString)}`;
     }
     if (!streamUrl) throw new NotFoundError('No stream found.');
