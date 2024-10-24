@@ -27,7 +27,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     if (ctx.media.type === 'movie' && item.type !== 'Movie') return false;
     if (ctx.media.type === 'show' && item.type !== 'Serie') return false;
 
-    return compareTitle(ctx.media.title, item.name);
+    return compareTitle(ctx.media.title, item.second_name);
   });
 
   if (!show) throw new NotFoundError('No watchable item found');
