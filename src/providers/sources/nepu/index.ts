@@ -52,40 +52,31 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     baseUrl: nepuBase,
     body: new URLSearchParams({ id: embedId }),
   });
-  let proxiedPlaylist;
   const headers = {
     referer: nepuReferer,
     origin: nepuReferer,
   };
   const headersString = JSON.stringify(headers);
   // Extract the part inside the <script> tags
-  // Use regex to extract the file array from the script content
   const jsonMatch = playerPage.match(/file:\s*(\[\{.*\}\])/);
-  console.log('jsonMatch:', jsonMatch);
-  if (jsonMatch && jsonMatch[1]) {
-    let jsonString;
-    jsonString = jsonMatch[1];
-    // Step 1: Replace property names with quotes (handles keys like 'file' and 'poster')
-    jsonString = jsonString.replace(/(\w+):/g, '"$1":');
+  if (!jsonMatch) throw new NotFoundError('Failed to find file');
 
-    // Step 2: Make sure values (like URLs) are wrapped in quotes properly
-    jsonString = jsonString.replace(/:\s*([^"[{]\S+)/g, ':"$1"');
-    jsonString = jsonString.replace(/"https":"\/\//g, '"https://');
-    jsonString = jsonString.replace(/", "/g, '",');
-    jsonString = jsonString.replace(/"\s+/g, '"'); // Remove spaces after quotes
-    jsonString = jsonString.replace(/\s+"/g, '"'); // Remove spaces before quotes
-    jsonString = jsonString.replace(/""https/g, '"https');
-    jsonString = jsonString.replace(/""poster/g, '"poster');
-    jsonString = jsonString.replace(/""/g, '"');
-    // Convert the matched part into a JSON string and parse it
-    const fileUrlMatch = jsonString.match(/"file":"([^"]+)"/);
-    // Extract the URL from the parsed data
-    if (fileUrlMatch && fileUrlMatch[1]) {
-      console.log('fileUrlMatch:', fileUrlMatch[1]);
-      proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(fileUrlMatch[1])}&headers=${encodeURIComponent(headersString)}`;
-      console.log('proxiedPlaylist:', proxiedPlaylist);
-    }
-  }
+  let jsonString = jsonMatch[1];
+  jsonString = jsonString.replace(/(\w+):/g, '"$1":');
+  jsonString = jsonString.replace(/:\s*([^"[{]\S+)/g, ':"$1"');
+  jsonString = jsonString.replace(/"https":"\/\//g, '"https://');
+  jsonString = jsonString.replace(/", "/g, '",');
+  jsonString = jsonString.replace(/"\s+/g, '"');
+  jsonString = jsonString.replace(/\s+"/g, '"');
+  jsonString = jsonString.replace(/""https/g, '"https');
+  jsonString = jsonString.replace(/""poster/g, '"poster');
+  jsonString = jsonString.replace(/""/g, '"');
+
+  const fileUrlMatch = jsonString.match(/"file":"([^"]+)"/);
+  if (!fileUrlMatch || !fileUrlMatch[1]) throw new NotFoundError('Failed to find file');
+  console.log('fileUrlMatch:', fileUrlMatch[1]);
+  const proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(fileUrlMatch[1])}&headers=${encodeURIComponent(headersString)}`;
+  console.log('proxiedPlaylist:', proxiedPlaylist);
 
   return {
     embeds: [],
@@ -95,7 +86,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
         captions: [],
         playlist: proxiedPlaylist,
         type: 'hls',
-        flags: [],
+        flags: [flags.CORS_ALLOWED],
       },
     ],
   } as SourcererOutput;
