@@ -76,6 +76,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     jsonString = jsonString.replace(/\s+"/g, '"'); // Remove spaces before quotes
     jsonString = jsonString.replace(/""https/g, '"https');
     jsonString = jsonString.replace(/""poster/g, '"poster');
+    jsonString = jsonString.replace(/""/g, '"');
     console.log('jsonString:', jsonString);
     // Convert the matched part into a JSON string and parse it
     const fileUrlMatch = jsonString.match(/"file":"([^"]+)"/);
