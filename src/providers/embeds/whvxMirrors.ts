@@ -1,5 +1,5 @@
 import { EmbedOutput, makeEmbed } from '@/providers/base';
-import { baseUrl } from '@/providers/sources/whvx';
+import { baseUrl } from '@/providers/sources/whvxMirrors';
 import { NotFoundError } from '@/utils/errors';
 
 const providers = [
