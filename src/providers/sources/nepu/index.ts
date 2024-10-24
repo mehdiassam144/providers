@@ -70,13 +70,16 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
 
     // Step 2: Make sure values (like URLs) are wrapped in quotes properly
     jsonString = jsonString.replace(/:\s*([^"[{]\S+)/g, ':"$1"');
+    console.log('jsonString:', jsonString);
     // Convert the matched part into a JSON string and parse it
     const fileUrlMatch = jsonString.match(/"file":"([^"]+)"/);
     // Extract the URL from the parsed data
     if (fileUrlMatch && fileUrlMatch[1]) {
       proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(fileUrlMatch[1])}&headers=${encodeURIComponent(headersString)}`;
     }
-    if (!fileUrlMatch) throw new NotFoundError('No stream found.');
+    if (!fileUrlMatch) {
+      throw new NotFoundError('No file URL found');
+    }
     console.log('Extracted Stream URL:', fileUrlMatch[1]);
   } else {
     console.log('No match found');
