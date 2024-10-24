@@ -26,7 +26,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   const show = searchResult.data.find((item) => {
     if (!item) return false;
     if (ctx.media.type === 'movie' && item.type !== 'Movie') return false;
-    if (ctx.media.type === 'show' && item.type !== 'Serie') return false;
+    if (ctx.media.type === 'show' && item.type !== 'Show') return false;
 
     return compareTitle(ctx.media.title, item.second_name);
   });
@@ -95,7 +95,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
 export const nepuScraper = makeSourcerer({
   id: 'nepu',
   name: 'Nepu',
-  rank: 80,
+  rank: 145,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
