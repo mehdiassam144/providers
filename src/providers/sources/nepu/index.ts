@@ -57,7 +57,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     origin: nepuReferer,
   };
   const headersString = JSON.stringify(headers);
-  const streamUrl = playerPage.match(/"file":"(http[^"]+)"/);
+  const streamUrl = playerPage.match(/"file"\s*:\s*"([^"]+)"/);
+
   if (streamUrl) {
     proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}&headers=${encodeURIComponent(headersString)}`;
   }
