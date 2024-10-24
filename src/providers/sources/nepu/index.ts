@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 
+import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { compareTitle } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -51,9 +52,14 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     body: new URLSearchParams({ id: embedId }),
   });
   let proxiedPlaylist;
+  const headers = {
+    referer: nepuReferer,
+    origin: nepuReferer,
+  };
+  const headersString = JSON.stringify(headers);
   const streamUrl = playerPage.match(/"file":"(http[^"]+)"/);
   if (streamUrl) {
-    proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}`;
+    proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}&headers=${encodeURIComponent(headersString)}`;
   }
   if (!streamUrl) throw new NotFoundError('No stream found.');
 
@@ -75,8 +81,8 @@ export const nepuScraper = makeSourcerer({
   id: 'nepu',
   name: 'Nepu',
   rank: 80,
-  disabled: true,
-  flags: [],
+  disabled: false,
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
 });
