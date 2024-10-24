@@ -82,6 +82,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     // Extract the URL from the parsed data
     if (fileUrlMatch && fileUrlMatch[1]) {
       console.log('fileUrlMatch:', fileUrlMatch[1]);
+      console.log('proxiedPlaylist:', proxiedPlaylist);
       proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(fileUrlMatch[1])}&headers=${encodeURIComponent(headersString)}`;
     }
   }
