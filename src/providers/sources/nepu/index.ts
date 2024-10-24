@@ -7,7 +7,7 @@ import { NotFoundError } from '@/utils/errors';
 
 import { SearchResults } from './types';
 
-const nepuBase = 'https://nepu.io';
+const nepuBase = 'https://rar.to';
 const nepuReferer = 'https://nepu.to';
 
 const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => {
@@ -50,9 +50,11 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     baseUrl: nepuBase,
     body: new URLSearchParams({ id: embedId }),
   });
-
+  let proxiedPlaylist;
   const streamUrl = playerPage.match(/"file":"(http[^"]+)"/);
-
+  if (streamUrl) {
+    proxiedPlaylist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}`;
+  }
   if (!streamUrl) throw new NotFoundError('No stream found.');
 
   return {
@@ -61,12 +63,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
       {
         id: 'primary',
         captions: [],
-        playlist: streamUrl[1],
+        playlist: proxiedPlaylist,
         type: 'hls',
-        headers: {
-          Origin: nepuReferer,
-          Referer: `${nepuReferer}/`,
-        },
         flags: [],
       },
     ],

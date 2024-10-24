@@ -10,8 +10,10 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     ctx.progress(progress);
   }, 100);
 
-  let url = `https://moviesapi.wafflehacker.io/scrape?id=${ctx.media.tmdbId}`;
-  if (ctx.media.type === 'show') url += `&s=${ctx.media.season.number}&e=${ctx.media.episode.number}`;
+  const urlEncodedTitle = encodeURIComponent(ctx.media.title);
+  const urlEncodedReleaseYear = encodeURIComponent(ctx.media.releaseYear);
+  let url = `https://ntflx.wafflehacker.io/scrape?title=${urlEncodedTitle}&type=${ctx.media.type}&releaseYear=${urlEncodedReleaseYear}`;
+  if (ctx.media.type === 'show') url += `&season=${ctx.media.season.number}&episode=${ctx.media.episode.number}`;
   const response = await ctx.fetcher(url);
   ctx.progress(100);
 
@@ -25,9 +27,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   throw new NotFoundError('No data found for this movie');
 }
 
-export const moviesApiScraper = makeSourcerer({
-  id: 'moviesapi',
-  name: 'MoviesAPI.club',
+export const netMirrorScraper = makeSourcerer({
+  id: 'netmirror',
+  name: 'NTFLX',
   rank: 130,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
