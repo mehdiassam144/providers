@@ -38,8 +38,9 @@ function embed(provider: { id: string; rank: number }) {
       }, 100);
 
       try {
+        const token = (window as any).validationToken as string | undefined;
         const search = await ctx.fetcher.full(
-          `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`,
+          `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}&token=${token}`,
           { headers },
         );
 
