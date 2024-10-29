@@ -39,10 +39,17 @@ function embed(provider: { id: string; rank: number }) {
 
       try {
         const token = (window as any).validationToken as string | undefined;
-        const search = await ctx.fetcher.full(
-          `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}&token=${token}`,
-          { headers },
-        );
+
+        // Construct the base URL with the query
+        let searchUrl = `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`;
+
+        // Append the token to the URL if it exists
+        if (token) {
+          searchUrl += `&token=${encodeURIComponent(token)}`;
+        }
+
+        // Make the API request
+        const search = await ctx.fetcher.full(searchUrl, { headers });
 
         if (search.statusCode === 429) {
           throw new Error('Rate limited');
