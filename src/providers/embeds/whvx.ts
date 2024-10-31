@@ -38,7 +38,8 @@ function embed(provider: { id: string; rank: number }) {
       }, 100);
 
       try {
-        const token = await ctx.fetcher(`https://www.vidbinge.com/icon.png`, { headers });
+        // eslint-disable-next-line dot-notation
+        const token = (window as any)['vbtk'] as string;
 
         // Construct the base URL with the query
         let searchUrl = `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`;
