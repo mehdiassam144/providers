@@ -30,7 +30,7 @@ export const filmxyScraper = makeSourcerer({
   id: 'filmxy',
   name: 'Filmxy',
   rank: 111,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeShow: comboScraper,
   scrapeMovie: comboScraper,
