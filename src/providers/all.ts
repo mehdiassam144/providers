@@ -39,6 +39,7 @@ import { closeLoadScraper } from './embeds/closeload';
 import { fileMoonScraper } from './embeds/filemoon';
 import { fileMoonMp4Scraper } from './embeds/filemoon/mp4';
 import { hydraxScraper } from './embeds/hydrax';
+import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydra';
 import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
 import { smashyStreamOScraper } from './embeds/smashystream/opstream';
@@ -64,6 +65,7 @@ import { goojaraScraper } from './sources/goojara';
 import { hdRezkaScraper } from './sources/hdrezka';
 import { m4uScraper } from './sources/m4ufree';
 import { moviplusScraper } from './sources/moviplus';
+import { mp4hydraScraper } from './sources/mp4hydra';
 import { nepuScraper } from './sources/nepu';
 import { netMirrorScraper } from './sources/netmirror';
 import { nitesScraper } from './sources/nites';
@@ -109,6 +111,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     twoEmbedScraper,
     netMirrorScraper,
     mirrorsScraper,
+    mp4hydraScraper,
   ];
 }
 
@@ -160,5 +163,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     doodScraper,
     amznScraper,
     ntflxScraper,
+    mp4hydraServer1Scraper,
+    mp4hydraServer2Scraper,
   ];
 }
