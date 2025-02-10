@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -14,24 +15,28 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const playerPage = await ctx.proxiedFetcher(endpoint, {
     baseUrl,
   });
-  const playerData = JSON.parse(playerPage);
+
   // Directly access the sources from playerPage (which is already a parsed JSON object)
-  const fileData: { label: string; file: string }[] = playerData.sources;
+  const fileData: { label: string; file: string }[] = playerPage.sources;
 
   const embeds: SourcererEmbed[] = [];
 
   for (const stream of fileData) {
+    console.log(stream);
     const url = stream.file;
-    if (!url) continue;
+    if (!stream.file) {
+      console.log(`Skipping stream due to missing file:`, stream); // Log skipped stream
+      continue;
+    }
 
     // Generating embedId using the label (in lowercase)
     const embedId = `hindiscrape-${stream.label.toLowerCase().trim()}`;
+    console.log(`Generated embedId: ${embedId}`);
 
     // Push the embed with the generated embedId and url
     embeds.push({ embedId, url });
   }
 
-  // eslint-disable-next-line no-console
   console.log(embeds);
   return {
     embeds,
