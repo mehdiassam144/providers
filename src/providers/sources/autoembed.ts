@@ -1,33 +1,34 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
-import { NotFoundError } from '@/utils/errors';
 
-const baseUrl = 'https://autoembed.cc/';
+const baseUrl = 'https://hindiscrape.whvx.net';
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
-  const playerPage = await ctx.proxiedFetcher(`/embed/player.php`, {
+  let endpoint = `/movie/${ctx.media.tmdbId}`;
+
+  if (ctx.media.type === 'show') {
+    endpoint = `/tv/${ctx.media.tmdbId}/${ctx.media.season.number.toString()}/${ctx.media.episode.number.toString()}`;
+  }
+
+  const playerPage = await ctx.proxiedFetcher(endpoint, {
     baseUrl,
-    query: {
-      id: ctx.media.tmdbId,
-      ...(ctx.media.type === 'show' && {
-        s: ctx.media.season.number.toString(),
-        e: ctx.media.episode.number.toString(),
-      }),
-    },
   });
 
-  const fileDataMatch = playerPage.match(/"file": (\[.*?\])/s);
-  if (!fileDataMatch[1]) throw new NotFoundError('No data found');
-
-  const fileData: { title: string; file: string }[] = JSON.parse(fileDataMatch[1].replace(/,\s*\]$/, ']'));
+  // Assuming playerPage is already a parsed JSON object
+  const fileData: { label: string; file: string }[] = playerPage.sources;
 
   const embeds: SourcererEmbed[] = [];
 
   for (const stream of fileData) {
     const url = stream.file;
     if (!url) continue;
-    embeds.push({ embedId: `autoembed-${stream.title.toLowerCase().trim()}`, url });
+
+    // Creating embedId using the label (lowercased and trimmed)
+    const embedId = `hindiscrape-${stream.label.toLowerCase().trim()}`;
+
+    // Push the embed with the generated embedId and url
+    embeds.push({ embedId, url });
   }
 
   return {
@@ -35,9 +36,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   };
 }
 
-export const autoembedScraper = makeSourcerer({
-  id: 'autoembed',
-  name: 'Autoembed (Multi Lang)',
+export const hindiScraper = makeSourcerer({
+  id: 'hindiscrape',
+  name: 'HindiScrape (Multi Lang)',
   rank: 10,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
