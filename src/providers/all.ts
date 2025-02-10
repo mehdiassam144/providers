@@ -28,11 +28,11 @@ import { mirrorsScraper } from '@/providers/sources/whvxMirrors';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import {
-  autoembedBengaliScraper,
-  autoembedEnglishScraper,
-  autoembedHindiScraper,
-  autoembedTamilScraper,
-  autoembedTeluguScraper,
+  hidiscrapeBengaliScraper,
+  hidiscrapeEnglishScraper,
+  hidiscrapeHindiScraper,
+  hidiscrapeTamilScraper,
+  hidiscrapeTeluguScraper,
 } from './embeds/autoembed';
 import { bflixScraper } from './embeds/bflix';
 import { closeLoadScraper } from './embeds/closeload';
@@ -58,7 +58,7 @@ import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
 import { astraScraper, novaScraper, orionScraper } from './embeds/whvx';
 import { amznScraper, ntflxScraper } from './embeds/whvxMirrors';
 import { wootlyScraper } from './embeds/wootly';
-import { autoembedScraper } from './sources/autoembed';
+import { hindiScraper } from './sources/autoembed';
 import { catflixScraper } from './sources/catflix';
 import { ee3Scraper } from './sources/ee3';
 import { goojaraScraper } from './sources/goojara';
@@ -105,7 +105,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     smashyStreamScraper,
     ee3Scraper,
     catflixScraper,
-    autoembedScraper,
+    hindiScraper,
     moviplusScraper,
     filmxyScraper,
     twoEmbedScraper,
@@ -153,11 +153,11 @@ export function gatherAllEmbeds(): Array<Embed> {
     smashyStreamFScraper,
     smashyStreamOScraper,
     turbovidScraper,
-    autoembedBengaliScraper,
-    autoembedEnglishScraper,
-    autoembedHindiScraper,
-    autoembedTamilScraper,
-    autoembedTeluguScraper,
+    hidiscrapeEnglishScraper,
+    hidiscrapeHindiScraper,
+    hidiscrapeBengaliScraper,
+    hidiscrapeTamilScraper,
+    hidiscrapeTeluguScraper,
     vidkerScraper,
     streamwishScraper,
     doodScraper,
