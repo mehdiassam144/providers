@@ -14,9 +14,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const playerPage = await ctx.proxiedFetcher(endpoint, {
     baseUrl,
   });
-
+  const playerData = JSON.parse(playerPage);
   // Directly access the sources from playerPage (which is already a parsed JSON object)
-  const fileData: { label: string; file: string }[] = playerPage.sources;
+  const fileData: { label: string; file: string }[] = playerData.sources;
 
   const embeds: SourcererEmbed[] = [];
 
@@ -31,14 +31,16 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     embeds.push({ embedId, url });
   }
 
+  // eslint-disable-next-line no-console
+  console.log(embeds);
   return {
     embeds,
   };
 }
 
 export const hindiScraper = makeSourcerer({
-  id: 'autoembed',
-  name: 'Autoembed (Multi Lang)',
+  id: 'hindiscraper',
+  name: 'Jalebi Scraper',
   rank: 10,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
