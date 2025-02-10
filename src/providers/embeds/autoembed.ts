@@ -3,23 +3,23 @@ import { makeEmbed } from '@/providers/base';
 
 const providers = [
   {
-    id: 'hidiscrape-english',
+    id: 'hindiscrape-english',
     rank: 10,
   },
   {
-    id: 'hidiscrape-hindi',
+    id: 'hindiscrape-hindi',
     rank: 9,
   },
   {
-    id: 'hidiscrape-tamil',
+    id: 'hindiscrape-tamil',
     rank: 8,
   },
   {
-    id: 'hidiscrape-telugu',
+    id: 'hindiscrape-telugu',
     rank: 7,
   },
   {
-    id: 'hidiscrape-bengali',
+    id: 'hindiscrape-bengali',
     rank: 6,
   },
 ];
