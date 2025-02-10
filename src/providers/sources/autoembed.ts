@@ -1,6 +1,7 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
+import { NotFoundError } from '@/utils/errors';
 
 const baseUrl = 'https://hindiscrape.whvx.net';
 
@@ -11,7 +12,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     endpoint = `/tv/${ctx.media.tmdbId}/${ctx.media.season.number.toString()}/${ctx.media.episode.number.toString()}`;
   }
 
-  const playerPage = await ctx.proxiedFetcher(endpoint, {
+  const playerPage = await ctx.fetcher(endpoint, {
     baseUrl,
   });
 
@@ -22,7 +23,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   for (const stream of fileData) {
     const url = stream.file;
-    if (!url) continue;
+    if (!url) {
+      throw new NotFoundError('No providers available'); // This error will be caught by the base provider
+    }
 
     // Creating embedId using the label (lowercased and trimmed)
     const embedId = `hindiscrape-${stream.label.toLowerCase().trim()}`;
